@@ -107,7 +107,7 @@ const config = {
       locale: "HelpTranslate",
       text: (
         <a
-          href="/language"
+          href="/localization-program-guideline"
           onClick={(e) => {
             e.stopPropagation();
           }}

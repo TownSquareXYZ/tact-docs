@@ -1,0 +1,122 @@
+# Statements
+
+## Variable declaration
+
+Declaring variable always requires an initial value and an explicit type:
+
+```tact
+let value: Int = 123;
+```
+
+## Static function call
+
+Anywhere in the function body, a static function can be called:
+
+```tact
+let expiration: Int = now() + 1000; // now() is stdlib static function
+```
+
+## Extension function call
+
+Some functions are defined only for specific types, they can be called this way:
+
+```tact
+let some: String = 95.toString(); // toString() is a stdlib function that is defined on Int type
+```
+
+## Operators
+
+Tact supports operations:
+
+- `!!` suffix operator - enforces non-null value, defined only for nullable types.
+- `!` - logical inversion, defined only for the `Bool` type.
+- `/`, `*`, `%` - division and multiplication operations, defined only for the `Int` type
+- `-`, `+` - arithmetic operations, defined only for `Int` type
+- `!=`, `==` - equality operations
+- `>`, `<`, `>=`, `<=` - compare operations, defined only for the `Int` type
+- `&&`, `||` - logical `AND` and `OR`
+
+## Loops
+
+### Repeat loop
+
+The Repeat Loop executes a block of code a specified number of times. In the example you provided, the code inside the loop will be executed 10 times.
+
+```tact
+let a: Int = 1;
+repeat(10) {
+  a = a * a;
+}
+```
+
+> **Note**
+> Repeat number must be a 32-bit int or of range exception is thrown. Negative values are ignored.
+
+### While loop
+
+The While Loop continues executing the block of code as long as the given condition is true.
+
+```tact
+let x: Int = 10;
+while(x > 0) {
+  x = x - 1;
+}
+```
+
+**Explanation**:
+
+- The code inside the loop will execute as long as � > 0 x>0.
+- In the example, the value of � x is decremented by 1 in each iteration, so the loop will run 10 times.
+
+### Until loop
+
+The Until Loop is a post-test loop that executes the block of code at least once and then continues to execute it until the given condition becomes true.
+
+```tact
+let x: Int = 10;
+do {
+  x = x - 1;  # do something no matter at least one time
+} until (x <= 0);
+```
+
+**Explanation**:
+
+- The code inside the loop will execute at least once, and then it will continue to execute until ( x \\leq 0 ).
+- In the example, the value of ( x ) is decremented by 1 in each iteration, so the loop will run 10 times.
+
+## If Statements
+
+> **Warn**
+> Curly brackets are required
+
+```tact
+if (condition) {
+  doSomething();
+}
+```
+
+```tact
+if (condition) {
+  doSomething();
+} else {
+  doSomething2();
+}
+```
+
+```tact
+if (condition) {
+  doSomething();
+} else if (condition2) {
+  doSomething2();
+} else {
+  doSomething3();
+}
+```
+
+## initOf
+
+Allows to compute init state for a contract:
+
+```tact
+let state: StateInit = initOf Contract(123, 123);
+```

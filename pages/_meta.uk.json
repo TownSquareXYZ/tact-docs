@@ -1,30 +1,30 @@
 {
   "index": {
-    "title": "Tact Documentation",
-    "type": "page",
-    "display": "hidden",
+    "title": "",
+    "type": "",
+    "display": "",
     "theme": {
-      "typesetting": "article"
+      "typesetting": ""
     }
   },
   "localization-program-guideline": {
-    "title": "localization program guideline",
-    "type": "page",
-    "display": "hidden",
+    "title": "",
+    "type": "",
+    "display": "",
     "theme": {
-      "typesetting": "article"
+      "typesetting": ""
     }
   },
   "book": {
-    "title": "Book",
-    "type": "page"
+    "title": "",
+    "type": ""
   },
   "language": {
-    "title": "Language",
-    "type": "page"
+    "title": "",
+    "type": ""
   },
   "ecosystem": {
-    "title": "Ecosystem",
-    "type": "page"
+    "title": "",
+    "type": ""
   }
 }

@@ -1,0 +1,117 @@
+# 学习⚡ Tact 中的所有编程知识
+
+import { Cards, Steps, Tabs } from 'nextra/components'
+
+![Tact横幅](public/banner.jpeg)
+
+Tact 是 TON 区块链的一种新编程语言，注重效率和简便性。 它设计得易于学习和使用，并且非常适合智能合约。 Tact 是一种静态类型语言，具有简单的语法和强大的类型系统。
+
+## 让我们开始吧！ [#开始]
+
+<Steps>
+
+### 确保 Node.js LTS 已安装并可用
+
+要检查它，请运行 `node --version{:shell}` --它应该会显示 18.0.0 或更高版本。
+
+### 运行以下命令创建一个带有简单计数器合约的新项目
+
+<Tabs items={['npm', 'yarn', 'pnpm']}>
+  <Tabs.Tab>
+    ```shell
+    npm create ton -- simple-counter --type tact-counter --contractName SimpleCounter
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```shell
+    yarn create ton -- simple-counter --type tact-counter --contractName SimpleCounter
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ``shell
+    pnpm create ton simple-counter --type tact-counter --contractName SimpleCounter
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+### 就是这样！ 您的第一个合同项目已经编写完成！
+
+进入相关目录查看 - `cd simple-counter/contracts{:shell}`。
+
+要重新编译，请使用新创建项目根目录中 `package.json` 脚本部分的命令。
+
+要部署，请参阅 [Blueprint](https://github.com/ton-org/blueprint) 文档--这是我们用来在 Tact 中创建和编译第一个简单计数器合约的工具。 事实上，Blueprint 的功能远不止这些：包括测试、定制等。
+
+</Steps>
+
+## 下一步去哪里？ [#下一页]
+
+<Steps>
+
+### 已经掌握了一些区块链知识？
+
+查看以下小抄，快速入门！
+
+<Cards>
+  <Cards.Card
+    icon="💎 "
+    title="来自 FunC (TON)"
+    href="/book/cs/from-func"
+  />
+  <Cards.Card
+    icon="🔷 "
+    title="来自 Solidity (Ethereum)"
+    href="/book/cs/from-solidity"
+  />
+</Cards>
+
+### 想了解更多吗？
+
+有关编译、测试和部署的进一步指导，请参阅 [开始](/book/guides/getting-started) 指南。
+
+有关您最喜欢的编辑器的自定义插件和其他工具，请参阅[工具](/ecosystem/tools/overview) 页面。
+
+或者，也可以查看以下更广泛的章节：
+
+- [书籍](/书籍) 帮助您逐步学习语言
+- [语言](/语言) 提供其中所有内容的完整参考资料
+- 最后，[生态系统](/ecosystem) 描述了 Tacts 和 TONs 生态系统中的 "外面有什么"。
+
+<Cards>
+  <Cards.Card
+    icon="📚 "
+    title="阅读《战术书》"
+    href="/book"
+  />
+  <Cards.Card icon="🔬 " title="学习语言" href="/language" /> 卡片
+    icon="🔬 "
+    title="学习语言"
+    href="/language"
+  />
+  <Cards.Card
+    icon="🗺️ "
+    title="拥抱生态系统"
+    href="/ecosystem"
+  />
+</Cards>
+
+### 感觉有点不舒服？
+
+如果您遇到困难，请随时联系 Tact 这个蓬勃发展的社区：
+
+<Cards>
+  <Cards.Card
+    icon="✈️ "
+    title="Telegram Group"
+    href="https://t.me/tactlang"
+  />
+  <Cards.Card
+    icon="🐦 "
+    title="X/Twitter"
+    href="https://twitter.com/tact_language"
+  />
+</Cards>
+
+祝你在⚡ Tact 的编码冒险中好运！
+
+</Steps>

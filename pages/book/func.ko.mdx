@@ -1,0 +1,290 @@
+# Compatibility with func
+
+Tact itself compiles to `func` and maps Tact entities directly to various `func` and `tl-b` types.
+
+## Convert types
+
+Primitive types in `tact` are directly mapped to `func` one. All rules about copying variables are the same. One of the big differences is that there are no visible mutation operators in `tact` and most `Slice` operations mutate variables in place.
+
+## Convert serialization
+
+Tact structs and messages serialization is automatic unlike `func` where you need to define serialization logic manually. To build a `tact` type that serializes to specific `tl-b`.
+
+The tact auto-layout algorithm is greedy. This means that it takes the next variable, calculates its size, and tries to fit it into a current cell. If it doesn't fit, it creates a new cell and continues. All inner structs for auto-layout are flattened before allocation.
+
+All, except `Address`, optional types are serialized as `Maybe` in `tl-b`. There is no support for `Either` since it does not define what to pick during serialization in some cases.
+
+### Examples
+
+```tact
+// _ value1:int257 = SomeValue;
+struct SomeValue {
+    value1: Int; // Default is 257 bits
+}
+```
+
+```tact
+// _ value1:int256 value2:uint32 = SomeValue;
+struct SomeValue {
+    value1: Int as int256;
+    value2: Int as uint32;
+}
+```
+
+```tact
+// _ value1:bool value2:Maybe bool = SomeValue;
+struct SomeValue {
+    value1: Bool;
+    value2: Bool?;
+}
+```
+
+```tact
+// _ cell:^cell = SomeValue;
+struct SomeValue {
+    cell: Cell; // Always stored as a reference
+}
+```
+
+```tact
+// _ cell:^slice = SomeValue;
+struct SomeValue {
+    cell: Slice; // Always stored as a reference
+}
+```
+
+```tact
+// _ value1:int256 value2:int256 value3:int256 ^[value4:int256] = SomeValue;
+struct SomeValue {
+    value1: Int as int256;
+    value2: Int as int256;
+    value3: Int as int256;
+    value4: Int as int256;
+}
+```
+
+```tact
+// _ value1:int256 value2:int256 value3:int256 ^[value4:int256] flag:bool = SomeValue;
+struct SomeValue {
+    value1: Int as int256;
+    value2: Int as int256;
+    value3: Int as int256;
+    flag: Bool; // Flag is written before value4 to avoid auto-layout to allocate it to the next cell
+    value4: Int as int256;
+}
+```
+
+```tact
+// _ value1:int256 value2:int256 value3:int256 ^[value4:int256 flag:bool] = SomeValue;
+struct SomeValue {
+    value1: Int as int256;
+    value2: Int as int256;
+    value3: Int as int256;
+    value4: Int as int256;
+    flag: Bool;
+}
+```
+
+```tact
+// _ value1:int256 value2:^TailString value3:int256 = SomeValue;
+struct SomeValue {
+    value1: Int as int256;
+    value2: String;
+    value3: Int as int256;
+}
+```
+
+## Convert received messages to `op` operations
+
+Tact generates a unique `op` for every received typed message, but it can be overwritten.
+
+Code in `func`:
+
+```func
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    ;; incoming message code...
+
+    ;; Receive MessageWithGeneratedOp message
+    if (op == 1180414602) {
+        ;; code...
+    }
+
+    ;; Receive MessageWithOverwrittenOP message
+    if (op == 291) {
+        ;; code...
+    }
+
+}
+```
+
+Will be in `tact`:
+
+```tact
+message MessageWithGeneratedOp {
+    amount: Int as uint32;
+}
+
+message(0x123) MessageWithOverwrittenOP {
+    amount: Int as uint32;
+}
+
+contract Contract {
+    // Contract Body...
+
+    receive(msg: MessageWithGeneratedOp) {
+        // code...
+    }
+
+    receive(msg: MessageWithOverwrittenOP) {
+        // code...
+    }
+
+}
+
+```
+
+## Convert get-methods
+
+You can express everything except `list-style-lists` in Tact that would be compatible with `func`'s `get`-methods.
+
+### Primitive return type
+
+if `get-method` returns a primitive in `func`, you can implement it the same way in the `tact`.
+
+Code in `func`:
+
+```func
+int seqno() method_id {
+    return 0;
+}
+```
+
+Will be in `tact`:
+
+```tact
+// Tact
+get fun seqno(): Int {
+    return 0;
+}
+```
+
+### Tensor return types
+
+In `func` there is a difference between tensor type `(int, int)` and `(int, (int))`, but for TVM there are no differences, they all represent a stack of two ints.
+
+To convert the tensor that returned from the `func` get-method, you need to define a `struct` that has the same amount of fields as the tensor and in the same order.
+
+Code in `func`:
+
+```func
+(int, slice, slice, cell) get_wallet_data() method_id {
+    return ...;
+}
+```
+
+Will be in `tact`:
+
+```tact
+struct JettonWalletData {
+    balance: Int;
+    owner: Address;
+    master: Address;
+    walletCode: Cell;
+}
+
+
+get fun get_wallet_data(): JettonWalletData {
+    return ...;
+}
+```
+
+### Tuple return type
+
+In `func` if you are returning a tuple, instead of a tensor you need to follow the process for tensor type, but define return type of a get method as optional.
+
+Code in `func`:
+
+```func
+[int, int] get_contract_state() method_id {
+    return ...;
+}
+```
+
+Will be in `tact`:
+
+```tact
+struct ContractState {
+    valueA: Int;
+    valueB: Int;
+}
+
+
+get fun get_contract_state(): ContractState? {
+    return ...;
+}
+```
+
+### Mixed tuple and tensor return types
+
+When some of the tensors are a tuple, you need to define a struct as in previous steps and the tuple one must be defined as a separate struct.
+
+Code in `func`:
+
+```func
+(int, [int, int]) get_contract_state() method_id {
+    return ...;
+}
+```
+
+Will be in `tact`:
+
+```tact
+struct ContractStateInner {
+    valueA: Int;
+    valueB: Int;
+}
+struct ContractState {
+    valueA: Int;
+    valueB: ContractStateInner;
+}
+
+
+get fun get_contract_state(): ContractState {
+    return ...;
+}
+```
+
+### Arguments mapping
+
+Conversion of get-methods arguments is forward. Each argument is mapped as-is to `func` one, and each tuple is mapped to a struct.
+
+Code in `func`:
+
+```func
+(int, [int, int]) get_contract_state(int arg1, [int,int] arg2) method_id {
+    return ...;
+}
+```
+
+Will be in `tact`:
+
+```tact
+struct ContractStateArg2 {
+    valueA: Int;
+    valueB: Int;
+}
+
+struct ContractStateInner {
+    valueA: Int;
+    valueB: Int;
+}
+struct ContractState {
+    valueA: Int;
+    valueB: ContractStateInner;
+}
+
+
+get fun get_contract_state(arg1: Int, arg2: ContractStateArg2): ContractState {
+    return ...;
+}
+```

@@ -61,12 +61,6 @@ export default withNextra({
   images: {
     unoptimized: true,
   },
-  // i18n: {
-  //   // locales: ['default', 'en', 'zh'],
-  //   locales: ['default', 'en'],
-  //   defaultLocale: 'default',
-  //   // localeDetection: false,
-  // },
   // { locale: "en", text: "English" },
   //   { locale: "zh-CN", text: "中文" },
   //   { locale: "ru", text: "Русский" },
@@ -74,7 +68,7 @@ export default withNextra({
   //   { locale: "pl", text: "Polski" },
   //   { locale: "uk", text: "Українська" },
   i18n: {
-    locales: ['en', 'zh-CN', 'ru', 'ko', 'pl', 'uk'],
+    locales: ["en", "zh-CN", "ru", "ko", "pl", "uk"],
     defaultLocale: "en",
     localeDetection: false,
   },
@@ -90,6 +84,7 @@ export default withNextra({
       test: allowedSvgRegex,
       use: ["@svgr/webpack"],
     });
+    
     return config;
   },
 });

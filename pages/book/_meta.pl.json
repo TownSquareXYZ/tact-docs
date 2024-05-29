@@ -1,0 +1,41 @@
+{
+  "index": "",
+  "guides": "",
+  "cs": "",
+  "cookbook": "",
+  "--": {
+    "type": ""
+  },
+  "types": "",
+  "functions": "",
+  "statements": "",
+  "constants": "",
+  "defining-types": "",
+  "receive": "",
+  "bounced": "",
+  "external": "",
+  "lifecycle": "",
+  "send": "",
+  "message-mode": "",
+  "deploy": "",
+  "debug": "",
+  "upgrades": "",
+  "import": "",
+  "masterchain": "",
+  "func": "",
+  "config": "",
+  "programmatic": "",
+  "-- Community": {
+    "type": ""
+  },
+  "telegram-link": {
+    "title": "",
+    "href": "",
+    "newWindow": ""
+  },
+  "xtwitter-link": {
+    "title": "",
+    "href": "",
+    "newWindow": ""
+  }
+}

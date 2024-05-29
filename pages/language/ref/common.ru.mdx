@@ -1,0 +1,128 @@
+import { Callout } from 'nextra-theme-docs'
+
+# Common
+
+List of a basic functions that are available in all smart contracts.
+
+## sender
+
+```tact
+fun sender(): Address;
+```
+
+<Callout type="warning" emoji="⚠️">
+Behaviour is undefined for get methods.
+</Callout>
+
+Returns the address of the sender of the current message.
+
+## require
+
+```tact
+fun require(condition: Bool, error: String);
+```
+
+Checks `condition` and throws an exception with `error` message if `condition` is false.
+
+## now
+
+```tact
+fun now(): Int
+```
+
+Returns current Unix time
+
+## myBalance
+
+```tact
+myBalance(): Int;
+```
+
+Returns the remaining balance of the smart contract as Int value in NanoToncoins, where NanoToncoin = Toncoin \* 10^(−9). Note that `send` do not update this field.
+
+## myAddress
+
+```tact
+myAddress(): Address;
+```
+
+Returns the internal address of the current smart contract as a Address.
+
+## newAddress
+
+<Callout type="warning" emoji="⚠️">
+This method throws error if `chain` is invalid or if trying to create address in the masterchain without [masterchain enabled](/language/guides/masterchain).
+</Callout>
+
+```tact
+fun newAddress(chain: Int, hash: Int): Address;
+```
+
+Creates a new address from `chain` and `hash` values.
+
+## contractAddress
+
+```tact
+fun contractAddress(s: StateInit): Address;
+```
+
+Computes smart contract's Address in a workchain #0 based on its StateInit `s`, where `s` is a Struct consists of `code` and `data` Cells.
+
+## contractAddressExt
+
+<Callout type="warning" emoji="⚠️">
+This method throws error if `chain` is invalid or if trying to create address in the masterchain without [masterchain enabled](/language/guides/masterchain).
+</Callout>
+
+```tact
+fun contractAddressExt(chain: Int, code: Cell, data: Cell): Address;
+```
+
+Computes smart contract's Address based on its workchain id `chain`, `code`, `data`.
+
+## emit
+
+```tact
+fun emit(value: Cell);
+```
+
+Sends a message to the outer world with the purpose of logging and analyzing it later off-chain. The message does not have a recipient and is gas-efficient compared to alternatives.
+
+## cell
+
+```tact
+fun cell("base64 boc"): Cell;
+```
+
+Compile-time function that embeds a Cell into the contract. The Cell is encoded in base64 format.
+
+## ton
+
+```tact
+fun ton(value: String): Int;
+```
+
+Compile-time function that converts ton's from human-readable format to the integer.
+
+## dump
+
+```tact
+fun dump(arg: Any);
+```
+
+Prints argument to the contract debug console. `debug` feature has to be enabled in `tact.config.json`.
+
+## context
+
+```tact
+fun context(): Context;
+```
+
+Return Struct `Context`, that consists of
+
+| Field   | Type    | Description                                                                                                               |
+| ------- | ------- | ------------------------------------------------------------------------------------------------------------------------- |
+| bounced | Bool    | [Bounced](https://ton.org/docs/learn/overviews/addresses#bounceable-vs-non-bounceable-addresses) flag of incoming message |
+| sender  | Address | Address of sender                                                                                                         |
+| value   | Int     | Amount of nanoToncoins in message                                                                                         |
+| raw     | Slice   | Slice reminder of message                                                                                                 |

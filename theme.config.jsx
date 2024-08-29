@@ -1,5 +1,10 @@
 import { useRouter } from 'next/router'
-import { DocsThemeConfig } from 'nextra-theme-docs'
+import { DocsThemeConfig, LocaleSwitch } from 'nextra-theme-docs'
+
+const PLACEHOLDER_LOCALES = {
+  en: "Search documentation",
+  "zh-CN": "搜索文档",
+};
 
 /**
  * @type {DocsThemeConfig}
@@ -130,7 +135,16 @@ const config = {
         }}
       />;
     </>
-  )
+  ),
+  navbar: {
+    extraContent: (props) => {
+      return (
+        <div>
+          <LocaleSwitch {...props} />
+        </div>
+      );
+    },
+  },
 }
 
 export default config
